@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 
 
@@ -209,4 +210,51 @@ class Soils:
         summary = np.array(summary)
         return summary
     
-
+    
+class Soil:
+    
+    def __init__(self, profileCode):
+        ss = Soils()
+        
+        # Features for each layer [[l1],[l2],[l3]...]
+        
+        self.layerIdxs = []
+        
+        self.textures = []
+        self.phs = []
+        self.organics = []
+        
+        # Initial, final, thickness 
+        self.horizonDepthInfos = []
+        self.gravimetricHumidities1 = []
+        self.gravimetricHumidities2 = []
+        self.usableHumidities = []
+        self.realDensities = []
+        self.apparentDensities = []
+        self.totalPorosities = []
+        
+        
+        layers = ss.getLayers(profileCode)
+        self.nbLayers = len(layers)
+        
+        # Foreach layer, append the values to the class attributes
+        for layerCode in layers:
+            layerID = ss.getLayerID(profileCode, layerCode)
+            
+            self.layerIdxs.append(layerID)
+            
+            self.textures.append(ss.getTexture(layerID))
+            self.phs.append(ss.getPH(layerID))
+            self.organics.append(ss.getOrganic(layerID))
+            
+            self.horizonDepthInfos.append(ss.getHorizonDepthInfos(layerID))
+            self.gravimetricHumidities1.append(ss.getGravimetricHumidity1(layerID))
+            self.gravimetricHumidities2.append(ss.getGravimetricHumidity2(layerID))
+            self.usableHumidities.append(ss.getUsableHumidity(layerID))
+            self.realDensities.append(ss.getRealDensity(layerID))
+            self.apparentDensities.append(ss.getApparentDensity(layerID))
+            self.totalPorosities.append(ss.getTotalPorosity(layerID))
+            
+            
+            
+           
