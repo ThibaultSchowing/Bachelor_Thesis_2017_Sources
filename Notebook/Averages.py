@@ -12,7 +12,8 @@ from matplotlib.pyplot import imshow
 class ClimatAverages:
     
     def __init__(self, year="2011", month="1", measure="tmin"
-                 ,path = "/mnt/hgfs/sharedKali/TB_Data_Meteo/outputs_yearly_v2_2011_2016/average/",):
+                 ,path = "C:/Users/thsch/Desktop/TB_Data_Meteo/outputs_yearly_v2_2011_2016/average/"):
+                 #,path = "/mnt/hgfs/sharedKali/TB_Data_Meteo/outputs_yearly_v2_2011_2016/average/",):
         
         self.path = str(path)
         self.measure = str(measure)
