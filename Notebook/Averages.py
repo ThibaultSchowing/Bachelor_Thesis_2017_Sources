@@ -166,6 +166,8 @@ class ClimaticDataWraper:
     def __init__(self, years):
         
         months = ["1","2","3","4","5","6","7","8","9","10","11","12"]
+        self.years = years
+        self.nbYears = len(years)
         
         # All datas
         self.globalTmaxAverages = []
