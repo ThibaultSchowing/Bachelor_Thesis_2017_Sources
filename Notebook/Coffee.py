@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import Soils
 
 class CoffeeCups:
@@ -448,15 +449,42 @@ class CoffeeCup:
         self.totalPorosities = soilInfo.totalPorosities
         
         # CREATE HERE THE DATAFRAME
-        rawTitle = ["Code","Date","Taster","Productor Name","ID number","SICA","Property","Vereda"]
         
-        measures = ["tmean","tmax","tmin","dtr","prec"]
+        ## General information
+        rawTitle = ["Code","Date","Taster","Productor Name","ID number","SICA","Property","Vereda"]
+        rawData = [self.code, self.info[0], self.info[1], self.info[2], self.info[3], self.info[4], self.info[5], self.info[6]]
+        
+        ## Climatic datas
+        measures = ["tmax","tmin","tmean","dtr","prec"]
         for m in measures:
             for y in self.years:
                 for i in range(1,13):
                     title = str(m) + str(y) + "." + str(i)
                     rawTitle.append(title)
         self.rawTitle = rawTitle
-        rawData = []
-              
+        
+        for t in self.tmax:
+            rawData.append(t)
+        for t in self.tmin:
+            rawData.append(t)
+        for t in self.tmean:
+            rawData.append(t)
+        for t in self.dtr:
+            rawData.append(t)
+        for t in self.prec:
+            rawData.append(t)
+            
+        
+        
+        ## Soil datas
+        soilTitle = ["ph","organic"]
+        for T in soilTitle:
+            rawTitle.append(T)
+            
+        rawData.append(self.phs[0])
+        rawData.append(self.organics[0])
+        
+        
+        self.rawData = rawData
+        
         
