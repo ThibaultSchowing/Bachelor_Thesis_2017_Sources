@@ -373,7 +373,9 @@ class CoffeeCups:
         return pereiraCoord
     def getSoilProfile(self, cupCode):
         
-        lambdaProfile = "66CATP01"
+        # 66BALP02
+        # 66CHICHU
+        lambdaProfile = "66BALP02"
         return lambdaProfile
     
 '''
@@ -477,12 +479,85 @@ class CoffeeCup:
         
         
         ## Soil datas
-        soilTitle = ["ph","organic"]
+        
+        # To make it uniform, each profile is suposed to have 3 layers. 
+        soilTitle = ["ph1","ph2","ph3",
+                     "organic1","organic2","organic3", 
+                     "grav. moist 1", "grav. moist 2", "grav. moist 3",
+                     "2nd grav. moist 1", "2nd grav. moist 2", "2nd grav. moist 3",
+                     "usableMoist 1", "usableMoist 2", "usableMoist 3",
+                    "real density1", "real density2", "real density3", 
+                    "apparent density1", "apparent density2", "apparent density3", 
+                    "total porosity1", "total porosity2", "total porosity3"]
         for T in soilTitle:
             rawTitle.append(T)
-            
-        rawData.append(self.phs[0])
-        rawData.append(self.organics[0])
+        
+        # For each layer add the values if exists or add NA
+        MAX_LAYER = 3
+        
+        #PH
+        for i in range(0,MAX_LAYER):
+            try:
+                rawData.append(self.phs[i])
+            except:
+                rawData.append(None)
+                
+        #Organic material
+        for i in range(0,MAX_LAYER):
+            try:
+                rawData.append(self.organics[i])
+            except:
+                rawData.append(None)
+        
+        # gravimetric moisture 1
+        for i in range(0,MAX_LAYER):
+            try:
+                rawData.append(self.gravimetricHumidities1[i])
+            except:
+                rawData.append(None)
+        
+        # gravimetric moisture 2
+        for i in range(0,MAX_LAYER):
+            try:
+                rawData.append(self.gravimetricHumidities2[i])
+            except:
+                rawData.append(None)
+        
+        # usableHumidities
+        for i in range(0,MAX_LAYER):
+            try:
+                rawData.append(self.usableHumidities[i])
+            except:
+                rawData.append(None)
+        
+        # Real density
+        
+        for i in range(0,MAX_LAYER):
+            try:
+                rawData.append(self.realDensities[i])
+            except:
+                rawData.append(None)
+        
+        
+        
+        # Apparent density
+        
+        for i in range(0,MAX_LAYER):
+            try:
+                rawData.append(self.apparentDensities[i])
+            except:
+                rawData.append(None)
+        
+        
+        
+        # Total porosity
+        
+        for i in range(0,MAX_LAYER):
+            try:
+                rawData.append(self.totalPorosities[i])
+            except:
+                rawData.append(None)
+        
         
         
         self.rawData = rawData

@@ -4,7 +4,7 @@ import numpy as np
 
 class Soils:
     
-    def __init__(self, path = "./Data/soils/suelos_risaralda_v2.csv"):
+    def __init__(self, path = "./Data/soils/sols_CompletProfilCode.csv"):
         
         
         self.path = path
