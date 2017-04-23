@@ -558,6 +558,29 @@ class CoffeeCup:
             except:
                 rawData.append(None)
         
+        ## Coffee information in the rawData table
+        
+        
+        
+        coffeeInfoTitle = ["FragranceAromaNota","SavorNota","SavorResidualNota","BodyNota",
+                           "AcidityNota","BalanceNota","SweetnessNota","CleancupNota","UniformityNota",
+                           "FragranceAromaPoints","SavorPoints","SavorResidualPoints","BodyPoints",
+                           "AcidityPoints","BalancePoints","SweetnessPoints","CleancupPoints",
+                           "UniformityPoints","TasterPoints","TotalSCAPoints"]
+        
+        for t in coffeeInfoTitle:
+            rawTitle.append(t)
+            
+        for y in self.taste:
+            tmp = ""
+            for e in y:
+                tmp = tmp + e + " " 
+                
+            rawData.append(tmp)
+        
+        for e in self.points:
+            rawData.append(e)
+            
         
         
         self.rawData = rawData
