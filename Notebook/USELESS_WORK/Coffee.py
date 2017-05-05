@@ -378,15 +378,6 @@ class CoffeeCups:
         lambdaProfile = "66BALP02"
         return lambdaProfile
     
-'''
- summary.append(self.getDate(cupCode))
-        summary.append(self.getTaster(cupCode))
-        summary.append(self.getProductorName(cupCode))
-        summary.append(self.getLicence(cupCode))
-        summary.append(self.getSICA(cupCode))
-        summary.append(self.getProperty(cupCode))
-        summary.append(self.getVereda(cupCode))
-'''
 
 
 class CoffeeCup:
@@ -480,6 +471,9 @@ class CoffeeCup:
         
         ## Soil datas
         
+
+        
+        '''
         # To make it uniform, each profile is suposed to have 3 layers. 
         soilTitle = ["ph1","ph2","ph3",
                      "organic1","organic2","organic3", 
@@ -491,14 +485,17 @@ class CoffeeCup:
                     "total porosity1", "total porosity2", "total porosity3"]
         for T in soilTitle:
             rawTitle.append(T)
+        '''
+        
         
         # For each layer add the values if exists or add NA
-        MAX_LAYER = 3
+        MAX_LAYER = 1
         
         #PH
         for i in range(0,MAX_LAYER):
             try:
                 rawData.append(self.phs[i])
+                rawTitle.append("ph" + str(i))
             except:
                 rawData.append(None)
                 
@@ -506,6 +503,7 @@ class CoffeeCup:
         for i in range(0,MAX_LAYER):
             try:
                 rawData.append(self.organics[i])
+                rawTitle.append("organic" + str(i))
             except:
                 rawData.append(None)
         
@@ -513,6 +511,7 @@ class CoffeeCup:
         for i in range(0,MAX_LAYER):
             try:
                 rawData.append(self.gravimetricHumidities1[i])
+                rawTitle.append("grav. moist " + str(i))
             except:
                 rawData.append(None)
         
@@ -520,6 +519,7 @@ class CoffeeCup:
         for i in range(0,MAX_LAYER):
             try:
                 rawData.append(self.gravimetricHumidities2[i])
+                rawTitle.append("2nd grav moist " + str(i))
             except:
                 rawData.append(None)
         
@@ -527,6 +527,7 @@ class CoffeeCup:
         for i in range(0,MAX_LAYER):
             try:
                 rawData.append(self.usableHumidities[i])
+                rawTitle.append("usable moist. " + str(i))
             except:
                 rawData.append(None)
         
@@ -535,16 +536,17 @@ class CoffeeCup:
         for i in range(0,MAX_LAYER):
             try:
                 rawData.append(self.realDensities[i])
+                rawTitle.append("real density " + str(i))
             except:
                 rawData.append(None)
         
-        
-        
+
         # Apparent density
         
         for i in range(0,MAX_LAYER):
             try:
                 rawData.append(self.apparentDensities[i])
+                rawTitle.append("Apparent Density " + str(i))
             except:
                 rawData.append(None)
         
@@ -555,6 +557,7 @@ class CoffeeCup:
         for i in range(0,MAX_LAYER):
             try:
                 rawData.append(self.totalPorosities[i])
+                rawTitle.append("Total Porosity" + str(i))
             except:
                 rawData.append(None)
         
