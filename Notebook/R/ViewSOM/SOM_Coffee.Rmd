@@ -1,0 +1,41 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+# Set the working directory
+setwd("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/ViewSOM/")
+
+library(kohonen)
+
+source('ViewSOM.R')
+
+# Install packages
+#list.of.packages <- c("ggplot2", "Rcpp", "caret", "network", "deldir","fields")
+#new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+#if(length(new.packages)) install.packages(new.packages)
+
+
+data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2Numeric_Complete_utf-8.csv", header=T, sep=",", stringsAsFactors = TRUE)
+
+data_matrix <- as.matrix(scale(data))
+
+getwd()
+
+attach(iris)
+
+viewData(iris)
+
+
+search()
+
+```
+
+
+
+
+```{r}
+head(data_matrix)
+```
+

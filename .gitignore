@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Directory pictures dataanalysis
+Notebook/R/Projects/SOMpakrat/VARIETY_ANALYSIS/
+
 # Distribution / packaging
 .Python
 env/
@@ -87,3 +90,4 @@ ENV/
 
 # Rope project settings
 .ropeproject
+.Rproj.user

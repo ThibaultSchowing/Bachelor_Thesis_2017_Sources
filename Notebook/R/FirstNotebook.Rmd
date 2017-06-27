@@ -17,19 +17,28 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
-```{r}
-plot(cars)
-```
+
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
 When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
+
+
 ```{r}
-data <- DataRisaralda_v2Numeric_utf_8
+getwd()
+```
+
+
+
+```{r}
+data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2Numeric_Complete_utf-8.csv", header=T, sep=",")
+data
 ```
 
 ```{r}
+
+
 # Load the kohonen package 
 require(kohonen)
 
@@ -58,7 +67,7 @@ data_train_matrix <- as.matrix(scale(data))
 # Create the SOM Grid - you generally have to specify the size of the 
 # training grid prior to training the SOM. Hexagonal and Circular 
 # topologies are possible
-som_grid <- somgrid(xdim = 15, ydim=15, topo='hexagonal')
+som_grid <- somgrid(xdim = 20, ydim=20, topo='hexagonal')
 
 # Finally, train the SOM, options for the number of iterations,
 # the learning rates, and the neighbourhood are available
@@ -80,6 +89,9 @@ plot(som_model, type="changes")
 plot(som_model, type="count")
 ```
 
+```{r}
+plot(som_model, type="mapping")
+```
 
 
 ```{r}
@@ -94,6 +106,37 @@ plot(som_model, type="dist.neighbours")
 	
 plot(som_model, type="codes")
 ```
+
+```{r}
+plot(som_model, type="quality")
+```
+
+
+
+```{r}
+plot(som_model, type="property")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -140,16 +183,43 @@ add.cluster.boundaries(som_model, som_cluster)
 
 
 ```{r}
-plot(som_model, type = "property", property = som_model$codes[5], main=names(som_model$data)[5], palette.name=coolBlueHotRed)
+plot(som_model, type = "quality", property = som_model$codes[5], main=names(som_model$data)[5], palette.name=coolBlueHotRed)
 
 ```
 
 
 
 ```{r}
-var <- 2 #define the variable to plot 
-var_unscaled <- aggregate(as.numeric(data_train[,var]), by=list(som_model$unit.classif), FUN=mean, simplify=TRUE)[,2] 
-plot(som_model, type = "property", property=var_unscaled, main=names(data_train)[var], palette.name=coo
+
 ```
 
+
+
+
+```{r}
+
+nir = mydata
+dfnir=data.frame(nir)
+nir = dfnir
+
+set.seed(13)
+## x=nir[,1:82],
+#Y = nir[,83:ncol(nir)]
+vintages
+
+nirnet <- xyf(scale(nir[,2:82]),nir[,ncol(nir)],grid = somgrid(6, 6, "hexagonal"), rlen=500)
+water.xyf <- predict(nirnet)$unit.prediction
+plot(nirnet, "property", property = water.xyf,main="Prediction of water content")
+## Plot temperatures as circles
+symbols(nirnet$grid$pts[nirnet$unit.classif,] +
+matrix(rnorm(sum(nir$training)*2, sd=.1), ncol=2),circles = (nir$temperature[nir$training] - 20)/250,inches = FALSE, add = TRUE)
+## Model temperatures
+set.seed(13)
+nirnet2 <- xyf(data = nir,Y = classvec2classmat(nir$temperature[nir$training]),xweight=.25,grid = somgrid(6, 6, "hexagonal"), rlen=500)
+temp.xyf <- classmat2classvec(predict(nirnet2)$unit.prediction)
+plot(nirnet2, "property", property = as.numeric(temp.xyf),palette.name = rainbow,main="Prediction of temperatures")
+## Plot concentrations of water as circles
+symbols(nirnet2$grid$pts[nirnet2$unit.classif,] +matrix(rnorm(sum(nir$training)*2, sd=.1), ncol=2),circles = 0.05 + 0.4 * nir$composition[nir$training,2],inches = FALSE, add = TRUE)
+
+```
 
