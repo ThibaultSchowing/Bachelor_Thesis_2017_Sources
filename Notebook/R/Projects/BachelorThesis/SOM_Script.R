@@ -1,8 +1,18 @@
 # Self Organising Maps
 
 
-data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2Numeric_Complete_utf-8.csv", header=T, sep=",")
+path <- "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/"
+setwd(path)
+
+filename <- "DataRisaralda_v2Numeric_Complete_utf-8.csv"
+
+data = read.csv(filename, header=T, sep=",")
+
+
+
 summary(data)
+
+
 # Load the kohonen package 
 install.packages('kohonen')
 require(kohonen)
@@ -73,14 +83,24 @@ sprintf("Clustering with  %d clusters",k)
 data_som <- data_matrix_2011
 summary(data_som)
 
-som_grid <- somgrid(xdim = 15, ydim=10, topo='hexagonal')
+som_grid <- somgrid(xdim = 10, ydim=10, topo='hexagonal')
 
 som_model2 <- som(data_som, 
                  grid=som_grid, 
                  rlen=100, 
                  alpha=c(0.05,0.01), 
                  keep.data = TRUE)
-names(data_som)
+
+# Som Clusters
+k= 5
+som_cluster <- cutree(hclust(dist(som_model2$codes)), k)
+plot(som_model2, type="mapping", bgcol = pretty_palette[som_cluster], main = "Clusters") 
+add.cluster.boundaries(som_model2, som_cluster)
+
+# Distances
+plot(som_model2, type="dist.neighbours")
+
+
 variable = c("PrecTotalAvg","TminTotalAvg","TmaxTotalAvg","TmeanTotalAvg","DtrTotalAvg","PuntajeTotal","DefectosTotales","ASNM")
 for(var_str in variable) {
   # get the index from the name
@@ -96,7 +116,7 @@ for(var_str in variable) {
 #
 data_som <- data_matrix_2016
 
-som_grid <- somgrid(xdim = 20, ydim=19, topo='hexagonal')
+som_grid <- somgrid(xdim = 10, ydim=10, topo='hexagonal')
 
 som_model2 <- som(data_som, 
                   grid=som_grid, 
@@ -120,6 +140,10 @@ for(var_str in variable) {
   var_unscaled <- aggregate(as.numeric(data_som[,var]), by=list(som_model2$unit.classif), FUN=mean, simplify=TRUE)[,2] 
   plot(som_model2, type = "property", property=var_unscaled, main=names(data)[var], palette.name=coolBlueHotRed)
   
+  # Saving the plots
+  png(filename="your/file/location/name.png")
+  plot(fit)
+  dev.off()
 }
 
 print('End')
