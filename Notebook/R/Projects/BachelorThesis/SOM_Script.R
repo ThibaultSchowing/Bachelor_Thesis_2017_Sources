@@ -2,13 +2,14 @@
 
 
 path <- "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/"
+pathSOM <- "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/SOM/"
 setwd(path)
 
 filename <- "DataRisaralda_v2Numeric_Complete_utf-8.csv"
 
 data = read.csv(filename, header=T, sep=",")
 
-
+setwd(pathSOM)
 
 summary(data)
 
@@ -50,8 +51,11 @@ som_model <- som(data_matrix,
                  alpha=c(0.05,0.01), 
                  keep.data = TRUE)
 
-
+# Plotthe map
+png(paste("All_Dist_neighbours.png"), width=4, height=4, units="in", res=300)
+par(mar=c(4,4,1,1))
 plot(som_model, type="dist.neighbours")
+dev.off()
 
 pretty_palette <- c("#1f77b4", '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#99000b', '#99FF00', '#FFFF44', '#00caca','#beef00','#00beef', '#cacabe')
 coolBlueHotRed <- function(n, alpha = 1) { rainbow(n, end=4/6, alpha=alpha)[n:1] }
@@ -70,9 +74,14 @@ plot(wss)
 som_cluster <- cutree(hclust(dist(som_model$codes)), k)
 #som.hc <- cutree(hclust(dist(sommap$codes[[1]])), groups)
 # plot these results:
+
+
+
+png(paste("2016_cluster.png"), width=4, height=4, units="in", res=300)
+par(mar=c(4,4,1,1))
 plot(som_model, type="mapping", bgcol = pretty_palette[som_cluster], main = "Clusters") 
 add.cluster.boundaries(som_model, som_cluster)
-
+dev.off()
 
 sprintf("Clustering with  %d clusters",k)
 
@@ -94,20 +103,34 @@ som_model2 <- som(data_som,
 # Som Clusters
 k= 5
 som_cluster <- cutree(hclust(dist(som_model2$codes)), k)
+
+png(paste("2011_cluster.png"), width=4, height=4, units="in", res=300)
+par(mar=c(4,4,1,1))
 plot(som_model2, type="mapping", bgcol = pretty_palette[som_cluster], main = "Clusters") 
 add.cluster.boundaries(som_model2, som_cluster)
+dev.off()
+
 
 # Distances
+png(paste("2011_distance.png"), width=4, height=4, units="in", res=300)
+par(mar=c(4,4,1,1))
 plot(som_model2, type="dist.neighbours")
-
+dev.off()
 
 variable = c("PrecTotalAvg","TminTotalAvg","TmaxTotalAvg","TmeanTotalAvg","DtrTotalAvg","PuntajeTotal","DefectosTotales","ASNM")
 for(var_str in variable) {
   # get the index from the name
   var <- grep(var_str, colnames(data_som))
   var_unscaled <- aggregate(as.numeric(data_som[,var]), by=list(som_model2$unit.classif), FUN=mean, simplify=TRUE)[,2] 
-  plot(som_model2, type = "property", property=var_unscaled, main=names(data)[var], palette.name=coolBlueHotRed)
   
+  
+  # Saving the plots
+  png(paste("2011_var_",var_str,".png"), width=4, height=4, units="in", res=300)
+  par(mar=c(4,4,1,1))
+  
+  plot(som_model2, type = "property", property=var_unscaled, main=names(data)[var], palette.name=coolBlueHotRed)
+  #plot(fit)
+  dev.off()
 }
 
 ###################2016########################
@@ -137,14 +160,73 @@ variable = c("PrecTotalAvg","TminTotalAvg","TmaxTotalAvg","TmeanTotalAvg","DtrTo
 for(var_str in variable) {
   # get the index from the name
   var <- grep(var_str, colnames(data_som))
-  var_unscaled <- aggregate(as.numeric(data_som[,var]), by=list(som_model2$unit.classif), FUN=mean, simplify=TRUE)[,2] 
-  plot(som_model2, type = "property", property=var_unscaled, main=names(data)[var], palette.name=coolBlueHotRed)
+  var_unscaled <- aggregate(as.numeric(data_som[,var]), by=list(som_model2$unit.classif), FUN=mean, simplify=TRUE)[,2]
+  
   
   # Saving the plots
-  png(filename="your/file/location/name.png")
-  plot(fit)
+  png(paste("2016_var_",var_str,".png"), width=4, height=4, units="in", res=300)
+  par(mar=c(4,4,1,1))
+  plot(som_model2, type = "property", property=var_unscaled, main=names(data)[var], palette.name=coolBlueHotRed)
+  
   dev.off()
 }
+
+
+
+#========================================================================================
+# SOM avec dataset compact
+
+
+setwd(path)
+filename <- "df_compact_2_utf-8.csv"
+
+data = read.csv(filename, header=T, sep=",")
+data <- data[complete.cases(data),]
+
+setwd(pathSOM)
+
+
+data_matrix <- as.matrix(scale(subset(data, select= -VARIEDAD)))
+
+som_grid <- somgrid(xdim = 19, ydim=19, topo='hexagonal')
+data_som <- data_matrix
+
+
+som_model2 <- som(data_som, 
+                  grid=som_grid, 
+                  rlen=100, 
+                  alpha=c(0.05,0.01), 
+                  keep.data = TRUE)
+
+
+# Som Clusters
+k= 5
+som_cluster <- cutree(hclust(dist(som_model2$codes)), k)
+
+# Saving the plots
+png(paste("All_Compact_Clusters.png"), width=4, height=4, units="in", res=300)
+par(mar=c(4,4,1,1))
+plot(som_model2, type="mapping", bgcol = pretty_palette[som_cluster], main = "Clusters") 
+add.cluster.boundaries(som_model2, som_cluster)
+dev.off()
+
+# Distances
+plot(som_model2, type="dist.neighbours")
+
+variable = c("PrecTotalAvg","TminTotalAvg","TmaxTotalAvg","TmeanTotalAvg","DtrTotalAvg","pH_avg","org_avg","ASNM","Slope","Orientation","PuntajeTotal","DefectosTotales")
+for(var_str in variable) {
+  # get the index from the name
+  var <- grep(var_str, colnames(data_som))
+  var_unscaled <- aggregate(as.numeric(data_som[,var]), by=list(som_model2$unit.classif), FUN=mean, simplify=TRUE)[,2] 
+  
+  # Saving the plots
+  png(paste("All_Compact_var_",var_str,".png"), width=4, height=4, units="in", res=300)
+  par(mar=c(4,4,1,1))
+  plot(som_model2, type = "property", property=var_unscaled, main=names(data)[var], palette.name=coolBlueHotRed)
+  dev.off()
+  
+}
+
 
 print('End')
 
