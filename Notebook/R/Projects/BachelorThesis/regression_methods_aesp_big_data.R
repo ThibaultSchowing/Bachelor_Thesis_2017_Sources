@@ -47,26 +47,17 @@ setwd(dirFol)
 
 #DataBase structure
 
-datNam <- "DataRisaralda_v2Numeric_Complete_utf-8_2.csv"
+datNam <- "DataRisaralda_v2_R_Total_utf-8.csv"
 
 dataSet   <- read.csv(datNam,row.names=1)
 
-#dataSet <- dataSet[,-82]
-
-#segme <- as.factor(dataSet[,62])
-
-#dataSet <- data.frame(dataSet[,1:81],segme,score=dataSet[,82])
-
-#dataSet <- dataSet[,-1]
-
-#head(dataSet)
 
 namsDataSet <- names(dataSet)
 
 
-inputs  <- 1:80  #inputs columns
-segme   <- 81   #split column
-output  <- 82   #output column
+inputs  <- 1:74  #inputs columns
+segme   <- 75   #split column
+output  <- 76   #output column
 
 
 #Creating the split factors
@@ -86,7 +77,7 @@ if(length(variety0)==0){variety = variety0 }else{variety = factor(c(variety0,"Al
 createFolders(dirFol,variety)
 
 #Descriptive Analysis
-for(var in variety[1:2]){
+for(var in variety){
 descriptiveGraphics(var,dataSet,inputs = inputs,segme = segme,output = output,
                     smooth=F,ylabel = "Score (SCAA)",smoothInd = NULL,
                     ghrp="box",res=80)
@@ -97,13 +88,13 @@ dataSetProces(variety,dataSet,segme,corRed="caret")
 
 #LINEAR REGRESSION; only when all inputs are cuantitative;  
 
-lineaRegresionFun(variety,dirLocation=paste0(getwd(),"/"),ylabs="Score (SCAA)")
+#lineaRegresionFun(variety,dirLocation=paste0(getwd(),"/"),ylabs="Score (SCAA)")
 
 #MULTILAYER PERCEPTRON
 
 
-for(var in variety[1:2]){
-  multilayerPerceptronFun(var,dirLocation=paste0(getwd(),"/"),nb.it=3,
+for(var in variety[1:3]){
+  multilayerPerceptronFun(var,dirLocation=paste0(getwd(),"/"),nb.it=30,
                           ylabs="Score (SCAA)",pertuRelevance=T,ncores=3)
   
 }
@@ -113,12 +104,6 @@ for(var in variety[1:2]){
 randomForestFun("All",nb.it=30,ncores = 3,saveWS=F)
 
 
-#CONDITIONAL FOREST; especify if you have categorical variables
-# Pas efficace si > 500 data
 
-#conditionalForestFun("All",nb.it=30, ncores= 3,saveWS=F)
-#GENERALIZED BOOSTED REGRESSION MODELING 
-
-boostingFun("All",nb.it=30,ncores=3,saveWS=F)
 
 

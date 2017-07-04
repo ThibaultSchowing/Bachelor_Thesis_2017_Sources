@@ -7,11 +7,11 @@
 #
 #
 #
-#
+#DataRisaralda_v2Numeric_Complete_utf-8
 
 
 
-data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2Numeric_Complete_class_utf-8.csv", 
+data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2_R_PCA_utf-8.csv", 
                 header=T,
                 row.names = 1,
                 sep=",", 
@@ -34,7 +34,7 @@ plotdata <- function(datos,data, ax1 = 1, ax2 = 2){
 
   
   #cafe.class = as.factor(data[,ncol(data)])
-  cafe.class = as.factor(data[,'category'])
+  #cafe.class = as.factor(data[,'year'])
   
   cafe.pca <- prcomp( datos,
                       center = TRUE,
@@ -43,11 +43,13 @@ plotdata <- function(datos,data, ax1 = 1, ax2 = 2){
   
   plot(cafe.pca, type = "l")
   
-  g <- ggbiplot(cafe.pca,choices = c(ax1,ax2), obs.scale = 1, var.scale = 1, 
-                groups = cafe.class, ellipse = TRUE, var.axes = TRUE, varname.size = 3,
-                circle = FALSE)
+  #g <- ggbiplot(cafe.pca,choices = c(ax1,ax2), obs.scale = 1, var.scale = 1, groups = cafe.class, ellipse = TRUE, var.axes = FALSE, varname.size = 3, circle = FALSE)
+
+  g <- ggbiplot(cafe.pca,choices = c(ax1,ax2), obs.scale = 1, var.scale = 1, ellipse = TRUE, var.axes = FALSE, varname.size = 3,
+              circle = FALSE)
   
-  g <- g + scale_color_discrete(name = 'Coffee Classes (1 = Outstanding, 2 = excellent, 3 = very good, 4 = below specialty quality)')
+  #g <- g + scale_color_discrete(name = 'Coffee Classes (1 = Outstanding, 2 = excellent, 3 = very good, 4 = below specialty quality)')
+  g <- g + scale_color_discrete(name = 'PCA')
   g <- g + theme(legend.direction = 'horizontal', 
                  legend.position = 'top')
   print(g)
@@ -66,15 +68,36 @@ initPackages()
 # Les matrices de corrélations nous ont montré que les points Ã©taient tous liés entre eux, on ne prendra donc que le total des points
 # et des défauts physiques
 
-climatData <- subset(data, select=c(PrecTotalAvg:DtrTotalAvg,ASNM,LUMINOSID,pH_avg,org_avg,franco_L1:cascajoso_L1,DefectosTotales,PuntajeTotal))
+climatData <- subset(data, select=c(-year))
 
+summary(climatData)
 pca = plotdata(climatData, data, ax1 = 1, ax2 = 2)
 print(pca$x)
 print(pca$rotation)
 
 write.csv(pca$rotation, file = "PCA_Rotation.csv")
 
-# On observe que altitude blabla avec le climat
+
+
+
+
+
+
+data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2Numeric_Complete_utf-8.csv", 
+                header=T,
+                row.names = 1,
+                sep=",", 
+                stringsAsFactors = TRUE)
+climatData <- subset(data, select=c(-year))
+
+summary(climatData)
+pca = plotdata(climatData, data, ax1 = 1, ax2 = 2)
+print(pca$x)
+print(pca$rotation)
+
+write.csv(pca$rotation, file = "PCA_Rotation.csv")
+
+
 
 
 # avec les donnÃ©es de climat uniquement
