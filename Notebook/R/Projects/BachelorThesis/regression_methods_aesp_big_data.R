@@ -55,7 +55,7 @@ dataSet   <- read.csv(datNam,row.names=1)
 namsDataSet <- names(dataSet)
 
 
-inputs  <- 1:74  #inputs columns
+inputs  <- 4:74  #inputs columns, on ignore sica year et ddefectos
 segme   <- 75   #split column
 output  <- 76   #output column
 
