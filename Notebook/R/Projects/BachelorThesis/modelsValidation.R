@@ -52,15 +52,15 @@ Category_pred <- predict(RFmodelCategory, testingCategory)
 
 
 ########################################################################
-
-
-# Partial plots
-partPlots <- function(modele){
+# display infos and save Partial plots
+########################################################################
+partPlots <- function(modele, save = TRUE, path = "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PartialPlots/"){
   imp = importance(modele$finalModel)
   print(imp)
   impvar = rownames(imp)[order(imp[, 1], decreasing=TRUE)]
   print(impvar)
-  setwd("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PartialPlots/")
+  #setwd("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PartialPlots/")
+  setwd(path)
   for (i in seq_along(impvar)) {
     file_name = paste(deparse(substitute(modele)),"_",impvar[i], "_PartialPlot.png", sep="")
     png(file_name, width=4, height=4, units="in", res=300)
@@ -79,8 +79,11 @@ partPlots <- function(modele){
 }
 
 
-# Plot the results of classification
-plotResultsPredictionClassification <- function(prediction, testdata,modele, filename){
+
+########################################################################
+# display infos Plot the results of classification
+########################################################################
+plotResultsPredictionClassification <- function(prediction, testdata,modele, path, save = TRUE){
   
   print(modele)
   varImp(modele)
@@ -96,15 +99,18 @@ plotResultsPredictionClassification <- function(prediction, testdata,modele, fil
   conf = as.data.frame(confMat$table)
   melted_conf <- melt(conf)
   
-  #png(paste(filename, "test.png", sep=""), width=4, height=4, units="in", res=300)
-  #par(mar=c(4,4,1,1))
-  
+  setwd(path)
+  png(paste(filename, "test.png", sep=""), width=4, height=4, units="in", res=300)
+  par(mar=c(4,4,1,1))
   ggplot(data = melted_conf, aes(x=Prediction, y=Reference, fill=value)) + geom_tile()
-  #dev.off()
-  
+  dev.off()
+  setwd(dirFol)
 }
 
-plotResultsPredictionRegression <- function(prediction, testdata, modele, filename){
+########################################################################
+# display infos and Plot the results of regression
+########################################################################
+plotResultsPredictionRegression <- function(prediction, testdata, modele){
   print("Model")
   print(modele)
   
@@ -127,16 +133,20 @@ plotResultsPredictionRegression <- function(prediction, testdata, modele, filena
 
 
 
-plotResultsPredictionClassification(prediction = Category_pred,testdata = testingCategory, RFmodelCategory, "testclassification")
+path = "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/RF_models_perfs/"
+
+plotResultsPredictionClassification(prediction = Category_pred,testdata = testingCategory, RFmodelCategory)
+
+plotResultsPredictionRegression(Total_pred, testingTotal$PuntajeTotal, RFmodelTotal)
+plotResultsPredictionRegression(Total_pred, testingTotal$PuntajeTotal, RFmodelAcidez)
+plotResultsPredictionRegression(Total_pred, testingTotal$PuntajeTotal, RFmodelDulzor)
 
 
-plotResultsPredictionRegression(Total_pred, testingTotal$PuntajeTotal, RFmodelTotal, "testRegression")
-plotResultsPredictionRegression(Total_pred, testingTotal$PuntajeTotal, RFmodelAcidez, "testRegression")
-plotResultsPredictionRegression(Total_pred, testingTotal$PuntajeTotal, RFmodelDulzor, "testRegression")
+path = "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PartialPlots/"
 
-partPlots(RFmodelTotal)
-partPlots(RFmodelAcidez)
-partPlots(RFmodelCategory)
+partPlots(RFmodelTotal, save = FALSE, path)
+partPlots(RFmodelAcidez, save = FALSE, path)
+partPlots(RFmodelCategory, save = FALSE, path)
 
 
 

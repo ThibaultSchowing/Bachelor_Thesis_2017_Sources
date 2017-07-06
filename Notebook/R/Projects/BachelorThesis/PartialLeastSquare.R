@@ -1,0 +1,142 @@
+
+# Partial least squares
+library(plsdepot)
+
+
+dataset = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2Numeric_Complete_utf-8.csv", 
+                   header=T,
+                   row.names = 1,
+                   sep=",", 
+                   stringsAsFactors = TRUE)
+
+# remove the 0s
+dataset   <- dataset[dataset$PuntajeTotal != 0,]
+data = dataset
+
+
+
+
+####################################################################################
+# Avec Puntaje Total
+# https://www.r-bloggers.com/partial-least-squares-regression-in-r/
+#
+####################################################################################
+
+to.remove <- c("SICA","year","Category","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Dulzor","SaborResidual","Sabor","Cuerpo","Acidez","Aroma.Fragancia","DefectosTotales")
+`%ni%` <- Negate(`%in%`)
+data = subset(dataset,select = names(dataset) %ni% to.remove)
+
+summary(data)
+
+
+pls1 = plsreg1(data[,1:ncol(data)-1], data[, ncol(data), drop = FALSE], comps = 3)
+
+
+
+# Graphique super pour le rapport !!!
+plot(pls1)
+
+pls1$x.scores
+
+# valeurs des composants extraits (paramètre comps)
+pls1$R2
+
+
+
+plot(data$PuntajeTotal, pls1$y.pred,  xlab="Original", ylab = "Predicted", ylim= c(40,82))
+title("Comparison of responses", cex.main = 0.9)
+abline(a = 0, b = 1, col = "gray85", lwd = 2)
+#text(data$PuntajeTotal, pls1$y.pred, col = "#5592e3")
+
+####################################################################################
+# Avec Acidez
+# https://www.r-bloggers.com/partial-least-squares-regression-in-r/
+#
+####################################################################################
+
+to.remove <- c("SICA","year","Category","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Dulzor","SaborResidual","Sabor","Cuerpo","PuntajeTotal","Aroma.Fragancia","DefectosTotales")
+`%ni%` <- Negate(`%in%`)
+data = subset(dataset,select = names(dataset) %ni% to.remove)
+
+summary(data)
+
+
+pls1 = plsreg1(data[,1:ncol(data)-1], data[, ncol(data), drop = FALSE], comps = 3)
+
+
+
+# Graphique super pour le rapport !!!
+plot(pls1)
+
+pls1$x.scores
+
+# valeurs des composants extraits (paramètre comps)
+pls1$R2
+
+
+
+plot(data$Acidez, pls1$y.pred,  xlab="Original", ylab = "Predicted", ylim = c(5,8.7))
+title("Comparison of responses", cex.main = 0.9)
+abline(a = 0, b = 1, col = "gray85", lwd = 2)
+#text(data$Acidez, pls1$y.pred, col = "#5592e3")
+
+
+
+####################################################################################
+# Avec Dulzor
+# https://www.r-bloggers.com/partial-least-squares-regression-in-r/
+#
+####################################################################################
+
+to.remove <- c("SICA","year","Category","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Acidez","SaborResidual","Sabor","Cuerpo","PuntajeTotal","Aroma.Fragancia","DefectosTotales")
+`%ni%` <- Negate(`%in%`)
+data = subset(dataset,select = names(dataset) %ni% to.remove)
+
+summary(data)
+
+
+pls1 = plsreg1(data[,1:ncol(data)-1], data[, ncol(data), drop = FALSE], comps = 3)
+
+
+
+# Graphique super pour le rapport !!!
+plot(pls1)
+
+pls1$x.scores
+
+# valeurs des composants extraits (paramètre comps)
+pls1$R2
+
+
+
+plot(data$Dulzor, pls1$y.pred,  xlab="Original", ylab = "Predicted",ylim = c(0,11))
+title("Comparison of responses", cex.main = 0.9)
+abline(a = 0, b = 1, col = "gray85", lwd = 2)
+#text(data$Acidez, pls1$y.pred, col = "#5592e3")
+
+
+####################################################################################
+# Avec la catégorie
+# https://www.r-bloggers.com/partial-least-squares-regression-in-r/
+#
+####################################################################################
+
+
+to.remove <- c("SICA","year","PuntajeTotal","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Dulzor","SaborResidual","Sabor","Cuerpo","Acidez","Aroma.Fragancia","DefectosTotales")
+`%ni%` <- Negate(`%in%`)
+data = subset(dataset,select = names(dataset) %ni% to.remove)
+
+summary(data)
+
+
+pls1 = plsreg1(data[,1:ncol(data)-1], data[, ncol(data), drop = FALSE], comps = 3)
+
+
+# Graphique super pour le rapport -> corrélation 
+plot(pls1)
+
+plot(data$Category, pls1$y.pred, xlab="Original", ylab = "Predicted", ylim = c(2,4))
+title("Comparison of responses", cex.main = 0.9)
+abline(a = 0, b = 1, col = "gray85", lwd = 2)
+#text(data$Category, pls1$y.pred, col = "#5592e3")
+
