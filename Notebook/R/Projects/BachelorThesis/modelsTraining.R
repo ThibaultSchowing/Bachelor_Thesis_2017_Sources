@@ -69,7 +69,8 @@ summary(descrCor2[upper.tri(descrCor2)])
 len = dim(dataset_categories_numerical)[2]
 
 
-inTrain <- createDataPartition(y=dataset_categories_numerical[,len -1], p=0.7, list=F)
+
+inTrain <- createDataPartition(y=dataset_categories_numerical[,len -1], p=0.9, list=F)
 trainingCategoryNum <- dataset_categories_numerical[inTrain,]
 testingCategoryNum  <- dataset_categories_numerical[-inTrain,]
 x_catNum <- trainingCategoryNum[,1:len-1]
@@ -80,8 +81,15 @@ mtry_catNum <- sqrt(ncol(x_catNum))
 tunegrid_catNum <- expand.grid(.mtry=mtry_catNum)
 
 ##################################################################
+# Preparing data and parameters for random forest
+#
+#
+#
+#
+##################################################################
+##################################################################
 # Category dataset
-inTrain <- createDataPartition(y=dataset_categories[,73], p=0.7, list=F)
+inTrain <- createDataPartition(y=dataset_categories[,73], p=0.9, list=F)
 trainingCategory <- dataset_categories[inTrain,]
 testingCategory  <- dataset_categories[-inTrain,]
 x_cat <- trainingCategory[,1:72]
@@ -91,7 +99,7 @@ tunegrid_cat <- expand.grid(.mtry=mtry_cat)
 
 ##################################################################
 # Acidez dataset
-inTrain <- createDataPartition(y=dataset_acidez[,73], p=0.7, list=F)
+inTrain <- createDataPartition(y=dataset_acidez[,73], p=0.9, list=F)
 trainingAcidez <- dataset_acidez[inTrain,]
 testingAcidez  <- dataset_acidez[-inTrain,]
 x_Acidez <- trainingAcidez[,1:72]
@@ -101,7 +109,7 @@ tunegrid_Acidez <- expand.grid(.mtry=mtry_Acidez)
 
 ##################################################################
 # Dulzor dataset
-inTrain <- createDataPartition(y=dataset_dulzor[,73], p=0.7, list=F)
+inTrain <- createDataPartition(y=dataset_dulzor[,73], p=0.9, list=F)
 trainingDulzor <- dataset_dulzor[inTrain,]
 testingDulzor  <- dataset_dulzor[-inTrain,]
 x_Dulzor <- trainingDulzor[,1:72]
@@ -111,7 +119,7 @@ tunegrid_Dulzor <- expand.grid(.mtry=mtry_Dulzor)
 
 ##################################################################
 # Total Points dataset
-inTrain <- createDataPartition(y=dataset_total[,73], p=0.7, list=F)
+inTrain <- createDataPartition(y=dataset_total[,73], p=0.9, list=F)
 trainingTotal <- dataset_total[inTrain,]
 testingTotal  <- dataset_total[-inTrain,]
 x_Total <- trainingTotal[,1:72]
@@ -124,16 +132,45 @@ tunegrid_Total <- expand.grid(.mtry=mtry_Total)
 
 ##################################################################
 # RANDOM FOREST
+#
+# IMPORTANT: http://www.listendata.com/2014/11/random-forest-with-r.html
 ##################################################################
 print("Starting Random Forest Trainings")
-RFmodelCategory=train(x_cat,y_cat,method="rf",tunegrid=tunegrid_cat,trControl=trainControl(method="repeatedcv",number=10,repeats=3),tuneLength=10,importance = TRUE)
+RFmodelCategory=train(x_cat,y_cat,method="rf",tunegrid=tunegrid_cat,trControl=trainControl(method="repeatedcv",number=10,repeats=3),tuneLength=10,importance = TRUE, proximity=T)
 print(".")
-RFmodelTotal=train(x_Total,y_Total,method="rf",tunegrid=tunegrid_Total,trControl=trainControl(method="repeatedcv",number=10,repeats=3),tuneLength=10,importance = TRUE)
+RFmodelTotal=train(x_Total,y_Total,method="rf",tunegrid=tunegrid_Total,trControl=trainControl(method="repeatedcv",number=10,repeats=3),tuneLength=10,importance = TRUE, proximity=T)
 print(".")
-RFmodelAcidez=train(x_Acidez,y_Acidez,method="rf",tunegrid=tunegrid_Acidez,trControl=trainControl(method="repeatedcv",number=10,repeats=3),tuneLength=10,importance = TRUE)
+RFmodelAcidez=train(x_Acidez,y_Acidez,method="rf",tunegrid=tunegrid_Acidez,trControl=trainControl(method="repeatedcv",number=10,repeats=3),tuneLength=10,importance = TRUE, proximity=T)
 print(".")
-RFmodelDulzor=train(x_Dulzor,y_Dulzor,method="rf",tunegrid=tunegrid_Dulzor,trControl=trainControl(method="repeatedcv", number=10,repeats=3),tuneLength=10,importance = TRUE)
+RFmodelDulzor=train(x_Dulzor,y_Dulzor,method="rf",tunegrid=tunegrid_Dulzor,trControl=trainControl(method="repeatedcv", number=10,repeats=3),tuneLength=10,importance = TRUE, proximity=T)
 print("Random Forest Done !")
+
+
+
+
+set.seed(543)
+cafe.rf <- randomForest(Acidez~., dataset_acidez)
+partialPlot(cafe.rf, dataset_acidez, ASNM, "Altitude")
+partialPlot(cafe.rf, dataset_acidez, Prec1, "Prec1")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##################################################################
 #  Classification with Neural Network
@@ -147,7 +184,7 @@ print("Starting ANN Training...")
 print(y_catNum)
 library(MASS)
 
-nnetFit <- train(x_catNum,y_catNum,method="nnet",preProcess=c("center", "scale"),tuneLength=10,trace=FALSE,maxit=1000,linout=FALSE)
+nnetFit <- train(x_catNum,y_catNum,method="nnet",preProcess=c("center", "scale"),tuneLength=10,trace=FALSE,maxit=1000,linout=TRUE)
 print("ANN Training DONE !")
 
 
