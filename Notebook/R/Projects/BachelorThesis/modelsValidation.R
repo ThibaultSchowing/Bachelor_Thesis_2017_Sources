@@ -133,6 +133,9 @@ plotResultsPredictionRegression <- function(prediction, testdata, modele){
 
 
 
+plot(Total_pred,testingTotal$PuntajeTotal)
+
+
 path = "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/RF_models_perfs/"
 
 plotResultsPredictionClassification(prediction = Category_pred,testdata = testingCategory, RFmodelCategory)
