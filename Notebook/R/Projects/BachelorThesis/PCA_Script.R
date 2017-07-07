@@ -11,14 +11,22 @@
 
 
 rm(list=ls())
-data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2_R_PCA_utf-8.csv", 
-                header=T,
-                row.names = 1,
-                sep=",", 
-                stringsAsFactors = TRUE)
-data   <- data[data$PuntajeTotal != 0,]
 
-summary(data)
+
+
+
+# data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2_R_PCA_utf-8.csv", 
+#                 header=T,
+#                 row.names = 1,
+#                 sep=",", 
+#                 stringsAsFactors = TRUE)
+# data   <- data[data$PuntajeTotal != 0,]
+# 
+# summary(data)
+
+
+
+
 
 initPackages <- function(){
   
@@ -107,7 +115,7 @@ write.csv(pca$rotation, file = "PCA_Rotation.csv")
 
 ####################################################################################
 #
-#
+# Reading the datas and removing the 0-points coffee
 #
 ####################################################################################
 
@@ -127,6 +135,32 @@ to.remove <- c("SICA","year","PuntajeTotal","Category","PuntajeCatador","TazaLim
 data = subset(data,select = names(data) %ni% to.remove)
 
 dim(summary(data))
+
+####################################################################################
+#
+# Simple PCA
+#
+####################################################################################
+
+
+cafe.pca <- prcomp( data,
+                    center = TRUE,
+                    scale. = TRUE) 
+plot(cafe.pca, type = "l")
+
+g <- ggbiplot(cafe.pca,choices = c(1,2), obs.scale = 1, var.scale = 1, ellipse = TRUE, var.axes = FALSE, varname.size = 3,
+              circle = FALSE)
+
+#g <- g + scale_color_discrete(name = 'Coffee Classes (1 = Outstanding, 2 = excellent, 3 = very good, 4 = below specialty quality)')
+g <- g + scale_color_discrete(name = 'PCA')
+g <- g + theme(legend.direction = 'horizontal', 
+               legend.position = 'top')
+print(g)
+
+print(cafe.pca$rotation)
+
+setwd("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PCA/")
+write.csv(pca$rotation, file = "PCA_Rotation.csv")
 
 ####################################################################################
 #
@@ -158,9 +192,10 @@ res.hcpc$data.clust
 # Test, we can decide whether the population distributions are identical without 
 # assuming them to follow the normal distribution.
 ####################################################################################
-
+par(mar=c(1,1,1,1))
 
 boxplot(dataset$Category ~ as.numeric(res.hcpc$data.clust$clust))
+
 table(dataset$Category,as.numeric(res.hcpc$data.clust$clust))
 kruskal.test(dataset$Category ~ as.numeric(res.hcpc$data.clust$clust))
 # ça montre que ça marche pas sauf pour le 4
@@ -190,7 +225,6 @@ kruskal.test(dataset$Dulzor,as.numeric(res.hcpc$data.clust$clust))
 res.hcpc$desc.var
 
 
-resp = 
 library(pgirmess)
 
 # Diff entre clusters

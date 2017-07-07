@@ -4,10 +4,12 @@
 
 rm(list=ls())
 
-library(caret)
+library('randomForest')
+library("caret")
 library(mlbench)
 library(ggplot2)
 library(reshape2)
+
 
 
 if(.Platform$OS.type == "unix") {
@@ -38,13 +40,13 @@ setwd(dirFol)
 ########################################################################
 # display infos and save Partial plots
 ########################################################################
-partPlots <- function(modele, save = TRUE, path = "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PartialPlotsVariability/"){
-  imp = importance(modele$finalModel)
+partPlots <- function(modele, save = TRUE){
+  imp = randomForest::importance(modele$finalModel)
   print(imp)
   impvar = rownames(imp)[order(imp[, 1], decreasing=TRUE)]
   print(impvar)
   #setwd("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PartialPlots/")
-  setwd(path)
+  setwd("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/VariabilityAnalysis/plots/")
   for (i in seq_along(impvar)) {
     file_name = paste(deparse(substitute(modele)),"_",impvar[i], "_PartialPlot.png", sep="")
     png(file_name, width=4, height=4, units="in", res=300)
@@ -75,16 +77,14 @@ partPlots <- function(modele, save = TRUE, path = "C:/Users/thsch/Desktop/Bachel
 # RFmodelCategoresVariability20
 
 # Predictions with the continuous outputs
-Total_pred10 <- predict(RFmodelPuntajeVariability10, testingTotal)
-Total_pred20 <- predict(RFmodelPuntajeVariability20, testingTotal)
+Total_pred10 <- predict(RFmodelPuntajeVariability10, testingTotal10)
+Total_pred20 <- predict(RFmodelPuntajeVariability20, testingTotal20)
 
-Acidez_pred <- predict(RFmodelAcidez, testingTotal)
-Dulzor_pred <- predict(RFmodelDulzor, testingTotal)
+Dulzor_pred10 <- predict(RFmodelDulzorVariability10, testingDulzor10)
+Dulzor_pred20 <- predict(RFmodelDulzorVariability20, testingDulzor20)
 
-
-# Prediction with the Category output
-Category_pred <- predict(RFmodelCategory, testingTotal)
-
+Category_pred10 <- predict(RFmodelCategoresVariability10, testingCategory10)
+Category_pred20 <- predict(RFmodelCategoresVariability20, testingCategories20)
 
 
 
@@ -93,10 +93,14 @@ Category_pred <- predict(RFmodelCategory, testingTotal)
 
 
 
+# Creating and saving the partial plots
 
-
-
-
+partPlots(RFmodelPuntajeVariability10)
+partPlots(RFmodelPuntajeVariability20)
+partPlots(RFmodelDulzorVariability10)
+partPlots(RFmodelDulzorVariability20)
+partPlots(RFmodelCategoresVariability10)
+partPlots(RFmodelCategoresVariability20)
 
 
 
