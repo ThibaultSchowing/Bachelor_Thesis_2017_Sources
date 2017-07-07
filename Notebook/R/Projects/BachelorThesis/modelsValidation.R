@@ -1,4 +1,4 @@
-# Validation des modèles
+# Validation des modèles du script "modelsTraining" - à inmporter depuis le serveur après l'exécution
 
 
 rm(list=ls())

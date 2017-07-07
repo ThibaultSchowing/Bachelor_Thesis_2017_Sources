@@ -129,14 +129,40 @@ data = subset(dataset,select = names(dataset) %ni% to.remove)
 summary(data)
 
 
-pls1 = plsreg1(data[,1:ncol(data)-1], data[, ncol(data), drop = FALSE], comps = 3)
+pls1 = plsreg1(data[,1:ncol(data)-1], data[, ncol(data), drop = FALSE], comps = 3 )
 
 
 # Graphique super pour le rapport -> corrélation 
 plot(pls1)
+#Perf
+postResample(pls1$y,pls1$y.pred)
 
 plot(data$Category, pls1$y.pred, xlab="Original", ylab = "Predicted", ylim = c(2,4))
 title("Comparison of responses", cex.main = 0.9)
 abline(a = 0, b = 1, col = "gray85", lwd = 2)
 #text(data$Category, pls1$y.pred, col = "#5592e3")
 
+
+
+# Tentative de classification avec PLS - utile pour structure utilisation caret
+####################################################################################
+
+# set.seed(849)
+# 
+# set.seed(123)
+# inTrain  <- createDataPartition(y=data[,72], p=0.7, list=F)
+# training <- data[inTrain,]
+# testing  <- data[-inTrain,]
+# 
+# x <- training[,1:71]
+# y <- as.factor(training[,72])
+# 
+# 
+# ctrl <- trainControl(method = "cv",number=2, repeats = 2)
+# 
+# tune <- expand.grid(.maxvar = 15, 
+#                     .direction = "both")
+# 
+# plsFit <- train(x,  y,method = "stepQDA", tuneGrid = tune,   trControl = ctrl)
+# plot(plsFit)
+# plot(plsFit$finalModel)
