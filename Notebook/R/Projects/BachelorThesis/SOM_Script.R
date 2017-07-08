@@ -1,3 +1,23 @@
+
+# Bachelor Thesis 2017 - Coffee - Climat - Soils data analysis
+# 
+# HEIG-VD - University of Applied Sciences of Western Switzerland
+# Route de Cheseaux 1, 1400 Yverdon-les-Bains, Switzerland
+# 
+# International Center for Tropical Agriculture (CIAT)
+# Headquarters and Regional Office for Latin America and the Caribbean, 
+# Km 17 Recta Cali-Palmira │C.P. 763537 │ A.A. 6713  Cali, Colombia
+# 
+# 
+# Student: Thibault Schowing
+# Teacher: Carlos Andrés Peña
+# 
+# File: 
+# Objective: 
+# 
+
+
+
 # Self Organising Maps
 
 rm(list=ls())
@@ -10,7 +30,7 @@ filename <- "DataRisaralda_v2Numeric_Complete_utf-8.csv"
 data = read.csv(filename, header=T, sep=",")
 
 
-# Retirer la variable SICA qui n'a pas de sens num�riquement parlant
+# Retirer la variable SICA qui n'a pas de sens numériquement parlant
 to.remove <- c("SICA")
 `%ni%` <- Negate(`%in%`)
 data = subset(data,select = names(data) %ni% to.remove)
@@ -231,7 +251,7 @@ for(var_str in variable) {
 
 
 #========================================================================================
-# SOM avec dataset complet num�rique 
+# SOM avec dataset complet numérique 
 
 
 setwd(path)

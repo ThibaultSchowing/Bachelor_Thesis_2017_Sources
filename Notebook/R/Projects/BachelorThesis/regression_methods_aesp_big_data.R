@@ -1,10 +1,30 @@
+
+# Bachelor Thesis 2017 - Coffee - Climat - Soils data analysis
+# 
+# HEIG-VD - University of Applied Sciences of Western Switzerland
+# Route de Cheseaux 1, 1400 Yverdon-les-Bains, Switzerland
+# 
+# International Center for Tropical Agriculture (CIAT)
+# Headquarters and Regional Office for Latin America and the Caribbean, 
+# Km 17 Recta Cali-Palmira â”‚C.P. 763537 â”‚ A.A. 6713  Cali, Colombia
+# 
+# 
+# Student: Thibault Schowing
+# Teacher: Carlos AndrÃ©s PeÃ±a
+# 
+# File: 
+# Objective: 
+# 
+#
+# LICENCE
+#
 # file data-analysis-AEPS-BigData.R
 # 
 # This file contains a script to develop regressions with machine learning methodologies
 #
 #
 # author: Hugo Andres Dorado 02-16-2015
-# Réutilisé par Thibault Schowing
+# RÃ©utilisÃ© par Thibault Schowing
 #
 #  
 #This script is free: you can redistribute it and/or modify
@@ -99,7 +119,7 @@ for(var in variety[1:3]){
   
 }
 
-#RANDOM FOREST attention à bien choisir le nombre d'ittération et de coeurs à mettre en marche
+#RANDOM FOREST attention Ã  bien choisir le nombre d'ittÃ©ration et de coeurs Ã  mettre en marche
 
 randomForestFun("All",nb.it=30,ncores = 3,saveWS=F)
 

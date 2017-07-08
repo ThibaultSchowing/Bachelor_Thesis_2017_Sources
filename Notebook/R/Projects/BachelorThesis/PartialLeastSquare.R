@@ -1,4 +1,23 @@
 
+# Bachelor Thesis 2017 - Coffee - Climat - Soils data analysis
+# 
+# HEIG-VD - University of Applied Sciences of Western Switzerland
+# Route de Cheseaux 1, 1400 Yverdon-les-Bains, Switzerland
+# 
+# International Center for Tropical Agriculture (CIAT)
+# Headquarters and Regional Office for Latin America and the Caribbean, 
+# Km 17 Recta Cali-Palmira │C.P. 763537 │ A.A. 6713  Cali, Colombia
+# 
+# 
+# Student: Thibault Schowing
+# Teacher: Carlos Andrés Peña
+# 
+# File: 
+# Objective: 
+# 
+
+
+
 # Partial least squares
 library(plsdepot)
 

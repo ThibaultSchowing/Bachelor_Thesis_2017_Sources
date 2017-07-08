@@ -1,6 +1,30 @@
+
+# Bachelor Thesis 2017 - Coffee - Climat - Soils data analysis
+# 
+# HEIG-VD - University of Applied Sciences of Western Switzerland
+# Route de Cheseaux 1, 1400 Yverdon-les-Bains, Switzerland
+# 
+# International Center for Tropical Agriculture (CIAT)
+# Headquarters and Regional Office for Latin America and the Caribbean, 
+# Km 17 Recta Cali-Palmira ‚îÇC.P. 763537 ‚îÇ A.A. 6713  Cali, Colombia
+# 
+# 
+# Student: Thibault Schowing
+# Teacher: Carlos Andr√©s Pe√±a
+# 
+# File: 
+# Objective: 
+# 
+
+
+
+
+
+
+
 # Analyse des Composantes Princpiales (ACP) ou Principal Component Analysis (PCA)
 # 
-# Les cafÈs sont reprÈsentÈs par leur classes 
+# Les caf√©s sont repr√©sent√©s par leur classes 
 #
 #
 #
@@ -11,20 +35,6 @@
 
 
 rm(list=ls())
-
-
-
-
-# data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2_R_PCA_utf-8.csv", 
-#                 header=T,
-#                 row.names = 1,
-#                 sep=",", 
-#                 stringsAsFactors = TRUE)
-# data   <- data[data$PuntajeTotal != 0,]
-# 
-# summary(data)
-
-
 
 
 
@@ -53,6 +63,8 @@ plotdata <- function(datos,data, ax1 = 1, ax2 = 2){
   
   #g <- ggbiplot(cafe.pca,choices = c(ax1,ax2), obs.scale = 1, var.scale = 1, groups = cafe.class, ellipse = TRUE, var.axes = FALSE, varname.size = 3, circle = FALSE)
 
+  
+  pdf("pca_simplified.pdf",width=6,height=4,paper='special') 
   g <- ggbiplot(cafe.pca,choices = c(ax1,ax2), obs.scale = 1, var.scale = 1, ellipse = TRUE, var.axes = FALSE, varname.size = 3,
               circle = FALSE)
   
@@ -61,6 +73,7 @@ plotdata <- function(datos,data, ax1 = 1, ax2 = 2){
   g <- g + theme(legend.direction = 'horizontal', 
                  legend.position = 'top')
   print(g)
+  dev.off()
   return(cafe.pca)
 }
 
@@ -71,25 +84,40 @@ initPackages()
 
 
 
-# RÈalisation de la PCA sur toutes les variables pour analyse
-# Pour rÈduire le nombre de variables et amÈliorer la lisibilitÈ on ne prend que la premiËre couche de texture
-# Les matrices de corrÈlations nous ont montrÈ que les points √©taient tous liÈs entre eux, on ne prendra donc que le total des points
-# et des dÈfauts physiques
+# Lecture du dataset compact pour plus de lisibilit√©. Les 10 moyenne de chaque mois sont remplac√©e par une moyenne sur les 10 mois. 
 
-climatData <- subset(data, select=c(-year))
+data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2_R_PCA_utf-8.csv",
+                header=T,
+                row.names = 1,
+                sep=",",
+                stringsAsFactors = TRUE)
+data   <- data[data$PuntajeTotal != 0,]
 
-summary(climatData)
-pca = plotdata(climatData, data, ax1 = 1, ax2 = 2)
+
+to.remove <- c("SICA","year","Category","PuntajeTotal","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Dulzor","SaborResidual","Sabor","Cuerpo","Acidez","Aroma.Fragrancia","DefectosTotales")
+`%ni%` <- Negate(`%in%`)
+data = subset(data,select = names(data) %ni% to.remove)
+# Petit probl√®me avec le point
+data$Aroma.Fragancia <- NULL
+
+
+summary(data)
+
+pca = plotdata(data, data, ax1 = 1, ax2 = 2)
+
+
 print(pca$x)
 print(pca$rotation)
 
-write.csv(pca$rotation, file = "PCA_Rotation.csv")
+# Fichier avec importance de chaque variable pour chaque dimensions. 
+write.csv(pca$rotation, file = "PCA_Rotation_Minimal.csv")
 
 
 
 
 
 
+# Fichier complet contenant toutes les informations climatiques 
 
 data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2Numeric_Complete_utf-8.csv", 
                 header=T,
@@ -101,17 +129,23 @@ data   <- data[data$PuntajeTotal != 0,]
 
 to.remove <- c("SICA","year","Category","PuntajeTotal","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Dulzor","SaborResidual","Sabor","Cuerpo","Acidez","Aroma.Fragrancia","DefectosTotales")
 `%ni%` <- Negate(`%in%`)
-data = subset(data,select = names(data) %ni% to.remove)
+climatdata = subset(data,select = names(data) %ni% to.remove)
+climatdata$Aroma.Fragancia <- NULL
 
 
-summary(climatData)
-pca = plotdata(climatData, data, ax1 = 1, ax2 = 2)
+summary(climatdata)
+pca = plotdata(climatdata, data, ax1 = 1, ax2 = 2)
 print(pca$x)
 print(pca$rotation)
 
-write.csv(pca$rotation, file = "PCA_Rotation.csv")
+write.csv(pca$rotation, file = "PCA_Rotation_Complete.csv")
 
 
+
+
+####################################################################################
+
+setwd("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PCA/")
 
 ####################################################################################
 #
@@ -130,10 +164,13 @@ dataset   <- dataset[dataset$PuntajeTotal != 0,]
 data = dataset
 dim(summary(data))
 
+# on enl√®ve les sorties et les informations inutiles aux calculs
+
 to.remove <- c("SICA","year","PuntajeTotal","Category","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Dulzor","SaborResidual","Sabor","Cuerpo","Acidez","Aroma.Fragancia","DefectosTotales")
 `%ni%` <- Negate(`%in%`)
 data = subset(data,select = names(data) %ni% to.remove)
 
+summary(data)
 dim(summary(data))
 
 ####################################################################################
@@ -148,6 +185,8 @@ cafe.pca <- prcomp( data,
                     scale. = TRUE) 
 plot(cafe.pca, type = "l")
 
+pdf("pca_complete.pdf",width=6,height=4,paper='special') 
+
 g <- ggbiplot(cafe.pca,choices = c(1,2), obs.scale = 1, var.scale = 1, ellipse = TRUE, var.axes = FALSE, varname.size = 3,
               circle = FALSE)
 
@@ -157,10 +196,12 @@ g <- g + theme(legend.direction = 'horizontal',
                legend.position = 'top')
 print(g)
 
+
+dev.off()
+
 print(cafe.pca$rotation)
 
-setwd("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PCA/")
-write.csv(pca$rotation, file = "PCA_Rotation.csv")
+write.csv(cafe.pca$rotation, file = "PCA_Rotation_Complete.csv")
 
 ####################################################################################
 #
@@ -169,12 +210,12 @@ write.csv(pca$rotation, file = "PCA_Rotation.csv")
 ####################################################################################
 library(FactoMineR)
 
-nbClusters = 9
+nbClusters = 3
 
 res.pca = PCA(data, scale.unit=TRUE, ncp=nbClusters, graph=TRUE)
 res.pca$ind
 
-res.hcpc = HCPC(res.pca,nb.clust=7)
+res.hcpc = HCPC(res.pca,nb.clust=nbClusters)
 
 res.hcpc$data.clust
 
@@ -192,13 +233,13 @@ res.hcpc$data.clust
 # Test, we can decide whether the population distributions are identical without 
 # assuming them to follow the normal distribution.
 ####################################################################################
-par(mar=c(1,1,1,1))
+par(mar=c(4,4,1,1))
 
 boxplot(dataset$Category ~ as.numeric(res.hcpc$data.clust$clust))
 
 table(dataset$Category,as.numeric(res.hcpc$data.clust$clust))
 kruskal.test(dataset$Category ~ as.numeric(res.hcpc$data.clust$clust))
-# Áa montre que Áa marche pas sauf pour le 4
+# √ßa montre que √ßa marche pas sauf pour le 4
 
 
 boxplot(dataset$Acidez ~ as.numeric(res.hcpc$data.clust$clust))
@@ -210,8 +251,8 @@ table(dataset$Dulzor,as.numeric(res.hcpc$data.clust$clust))
 kruskal.test(dataset$Dulzor,as.numeric(res.hcpc$data.clust$clust))
 
 
-# ‡ mettre dans le rapport: on a essayÈ avec des mÈthodes de clustering (ci-dessus avec la catÈgorie et ci-dessous avec d'autres variables)
-# Áa ne donne rien de visible -> on utilisera pas les clusters comme variables suplÈmentaires
+# √† mettre dans le rapport: on a essay√© avec des m√©thodes de clustering (ci-dessus avec la cat√©gorie et ci-dessous avec d'autres variables)
+# √ßa ne donne rien de visible -> on utilisera pas les clusters comme variables supl√©mentaires
 
 ####################################################################################
 # Multiple Comparison Test After Kruskal-Wallis
@@ -232,5 +273,11 @@ kruskalmc(dataset$Category, res.hcpc$data.clust$clust, probs = 0.05, cont=NULL)
 kruskalmc(dataset$Acidez, res.hcpc$data.clust$clust, probs = 0.05, cont=NULL)
 kruskalmc(dataset$Dulzor, res.hcpc$data.clust$clust, probs = 0.05, cont=NULL)
 kruskalmc(dataset$PuntajeTotal, res.hcpc$data.clust$clust, probs = 0.05, cont=NULL)
+
+
+
+
+
+
 
 
