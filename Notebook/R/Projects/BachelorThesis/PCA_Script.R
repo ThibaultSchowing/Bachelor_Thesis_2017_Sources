@@ -91,7 +91,9 @@ data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/Da
                 row.names = 1,
                 sep=",",
                 stringsAsFactors = TRUE)
+# on enlève les 0
 data   <- data[data$PuntajeTotal != 0,]
+print(dim(data))
 
 
 to.remove <- c("SICA","year","Category","PuntajeTotal","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Dulzor","SaborResidual","Sabor","Cuerpo","Acidez","Aroma.Fragrancia","DefectosTotales")
@@ -124,9 +126,11 @@ data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/Da
                 row.names = 1,
                 sep=",", 
                 stringsAsFactors = TRUE)
+
+# On enlève les zéros
 data   <- data[data$PuntajeTotal != 0,]
 
-
+# On enlève les sorties
 to.remove <- c("SICA","year","Category","PuntajeTotal","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Dulzor","SaborResidual","Sabor","Cuerpo","Acidez","Aroma.Fragrancia","DefectosTotales")
 `%ni%` <- Negate(`%in%`)
 climatdata = subset(data,select = names(data) %ni% to.remove)
@@ -134,6 +138,7 @@ climatdata$Aroma.Fragancia <- NULL
 
 
 summary(climatdata)
+# graph avec toutes les données, sans les zéros
 pca = plotdata(climatdata, data, ax1 = 1, ax2 = 2)
 print(pca$x)
 print(pca$rotation)
@@ -210,12 +215,16 @@ write.csv(cafe.pca$rotation, file = "PCA_Rotation_Complete.csv")
 ####################################################################################
 library(FactoMineR)
 
-nbClusters = 3
+nbCluster = 3
+nbComp = 9
 
-res.pca = PCA(data, scale.unit=TRUE, ncp=nbClusters, graph=TRUE)
+res.pca = PCA(data, scale.unit=TRUE, ncp=nbComp,quali.sup = 63, graph=TRUE)
 res.pca$ind
 
-res.hcpc = HCPC(res.pca,nb.clust=nbClusters)
+# On doit faire 9 kruskal si on choisi 9 component (on a vérifié et les 9 premiers ont une eigenvalue > 1 -> on en prend 9)
+res.pca$eig
+
+res.hcpc = HCPC(res.pca,nb.clust=nbCluster)
 
 res.hcpc$data.clust
 
@@ -239,17 +248,32 @@ boxplot(dataset$Category ~ as.numeric(res.hcpc$data.clust$clust))
 
 table(dataset$Category,as.numeric(res.hcpc$data.clust$clust))
 kruskal.test(dataset$Category ~ as.numeric(res.hcpc$data.clust$clust))
-# ça montre que ça marche pas sauf pour le 4
+# Une petite P-value montre une différence significative -> après on utilise un post kruskal pour savoir où est la différence
 
 
 boxplot(dataset$Acidez ~ as.numeric(res.hcpc$data.clust$clust))
 table(dataset$Acidez,as.numeric(res.hcpc$data.clust$clust))
 kruskal.test(dataset$Acidez ~ as.numeric(res.hcpc$data.clust$clust))
 
+kruskal.test(res.pca$ind$coord[,1] ~ as.numeric(res.hcpc$data.clust$clust))
+
+# Inertia gain -> testing the optimal nb of cluster 
+barplot(sort(res.hcpc$call$t$inert.gain ,decreasing=T)[1:20],names.arg=1:20,col="lightseagreen",main="Select the number of Cluster",xlab="Number of cluster",ylab="height") 
+
+plot(res.hcpc, axes = c(1,2), choice = "3D.map", 
+     draw.tree = TRUE, ind.names = TRUE, title = NULL,
+     tree.barplot = TRUE, centers.plot = TRUE)
+plot(res.hcpc, choice ="tree", cex = 0.6)
+plot(res.hcpc, axes = c(2,3), choice ="map", draw.tree = FALSE)
+
 boxplot(dataset$Dulzor ~ as.numeric(res.hcpc$data.clust$clust))
 table(dataset$Dulzor,as.numeric(res.hcpc$data.clust$clust))
 kruskal.test(dataset$Dulzor,as.numeric(res.hcpc$data.clust$clust))
 
+
+boxplot(dataset$PuntajeTotal ~ as.numeric(res.hcpc$data.clust$clust))
+table(dataset$PuntajeTotal,as.numeric(res.hcpc$data.clust$clust))
+kruskal.test(dataset$PuntajeTotal,as.numeric(res.hcpc$data.clust$clust))
 
 # à mettre dans le rapport: on a essayé avec des méthodes de clustering (ci-dessus avec la catégorie et ci-dessous avec d'autres variables)
 # ça ne donne rien de visible -> on utilisera pas les clusters comme variables suplémentaires
