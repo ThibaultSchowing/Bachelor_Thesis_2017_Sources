@@ -163,6 +163,34 @@ abline(a = 0, b = 1, col = "gray85", lwd = 2)
 
 
 
+####################################################################################
+# Tentative avec un dataset plus compact 
+# https://www.r-bloggers.com/partial-least-squares-regression-in-r/
+#
+####################################################################################
+
+data = read.csv("C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/DataAnalysis/data/DataRisaralda_v2_R_PCA_utf-8.csv",
+                header=T,
+                row.names = 1,
+                sep=",",
+                stringsAsFactors = TRUE)
+# on enlève les 0
+data   <- data[data$PuntajeTotal != 0,]
+
+to.remove <- c("SICA","year","Category","PuntajeCatador","TazaLimpia","Balance","Uniformidad","Dulzor","SaborResidual","Sabor","Cuerpo","Acidez","Aroma.Fragancia","DefectosTotales")
+`%ni%` <- Negate(`%in%`)
+data = subset(dataset,select = names(dataset) %ni% to.remove)
+
+pls1 = plsreg1(data[,1:ncol(data)-1], data[, ncol(data), drop = FALSE], comps = 3 )
+
+
+# Graphique super pour le rapport -> corrélation 
+plot(pls1)
+
+plot(data$PuntajeTotal, pls1$y.pred,  xlab="Original", ylab = "Predicted", ylim= c(40,82))
+title("Comparison of responses", cex.main = 0.9)
+abline(a = 0, b = 1, col = "gray85", lwd = 2)
+
 # Tentative de classification avec PLS - utile pour structure utilisation caret
 ####################################################################################
 

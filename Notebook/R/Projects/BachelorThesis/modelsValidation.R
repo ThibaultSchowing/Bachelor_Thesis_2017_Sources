@@ -28,7 +28,7 @@ library(caret)
 library(mlbench)
 library(ggplot2)
 library(reshape2)
-
+library(randomForest)
 
 if(.Platform$OS.type == "unix") {
   library(doMC)
@@ -121,10 +121,14 @@ plotResultsPredictionClassification <- function(prediction, testdata,modele, pat
   melted_conf <- melt(conf)
   
   setwd(path)
-  png(paste(filename, "test.png", sep=""), width=4, height=4, units="in", res=300)
-  par(mar=c(4,4,1,1))
+  #filename = "class_pred_"
+  #pdf(paste(filename, ".pdf", sep=""), width=4, height=4)
+  #par(mar=c(4,4,1,1))
+  #ggplot(data = melted_conf, aes(x=Prediction, y=Reference, fill=value)) + geom_tile()
+  #dev.off()
+  # For display in R
   ggplot(data = melted_conf, aes(x=Prediction, y=Reference, fill=value)) + geom_tile()
-  dev.off()
+  
   setwd(dirFol)
 }
 
@@ -144,10 +148,10 @@ plotResultsPredictionRegression <- function(prediction, testdata, modele){
   print(modele$finalModel)
   
   
-  plot(modele$finalModel, main = paste(deparse(substitute(modele)),"_regression"))
+  plot(modele$finalModel, main = paste(deparse(substitute(modele)),"_Acidez_regression"))
   
   varImp(modele)
-  
+  plot(modele)
   
   
 }
@@ -157,13 +161,21 @@ plotResultsPredictionRegression <- function(prediction, testdata, modele){
 plot(Total_pred,testingTotal$PuntajeTotal)
 
 
+
+
 path = "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/RF_models_perfs/"
 
-plotResultsPredictionClassification(prediction = Category_pred,testdata = testingCategory, RFmodelCategory)
+plotResultsPredictionClassification(prediction = Category_pred,testdata = testingCategory, RFmodelCategory,path)
 
 plotResultsPredictionRegression(Total_pred, testingTotal$PuntajeTotal, RFmodelTotal)
-plotResultsPredictionRegression(Total_pred, testingTotal$PuntajeTotal, RFmodelAcidez)
-plotResultsPredictionRegression(Total_pred, testingTotal$PuntajeTotal, RFmodelDulzor)
+plot(Total_pred, testingTotal$PuntajeTotal, xlab = "Prediction", ylab = "Actual data", main = "Prediction of Puntaje Total"
+     ,xlim = c(40,90))
+
+plotResultsPredictionRegression(Acidez_pred, testingAcidez$Acidez, RFmodelAcidez)
+plot(Acidez_pred, testingAcidez$Acidez, xlab = "Prediction", ylab = "Actual data", main = "Prediction of Acidez")
+
+plotResultsPredictionRegression(Dulzor_pred, testingDulzor$Dulzor, RFmodelDulzor)
+plot(Dulzor_pred, testingDulzor$Dulzor)
 
 
 path = "C:/Users/thsch/Desktop/Bachelor_Thesis_2017_Sources/Notebook/R/Projects/BachelorThesis/PartialPlots/"
