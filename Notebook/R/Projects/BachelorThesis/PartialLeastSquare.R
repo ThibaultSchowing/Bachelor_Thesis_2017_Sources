@@ -92,7 +92,7 @@ pls1$x.scores
 # valeurs des composants extraits (paramètre comps)
 pls1$R2
 
-
+pls1$
 
 plot(data$Acidez, pls1$y.pred,  xlab="Original", ylab = "Predicted", ylim = c(5,8.7))
 title("Comparison of responses", cex.main = 0.9)
@@ -192,7 +192,7 @@ title("Comparison of responses", cex.main = 0.9)
 abline(a = 0, b = 1, col = "gray85", lwd = 2)
 
 # Tentative de classification avec PLS - utile pour structure utilisation caret
-####################################################################################
+###############################################################################
 
 # set.seed(849)
 # 

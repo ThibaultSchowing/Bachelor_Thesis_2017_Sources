@@ -111,7 +111,6 @@ Category_pred20 <- predict(RFmodelCategoresVariability20, testingCategories20)
 
 
 
-
 # Creating and saving the partial plots
 
 partPlots(RFmodelPuntajeVariability10)
@@ -123,5 +122,9 @@ partPlots(RFmodelCategoresVariability20)
 
 
 
+plot(Total_pred10,testingTotal10$PuntajeTotal, xlim = c(0,80), xlab = "Prédiction", ylab = "Valeur actuelle")
+plot(Total_pred20,testingTotal20$PuntajeTotal, xlim = c(0,80), xlab = "Prédiction", ylab = "Valeur actuelle")
 
+plot(Category_pred10,testingCategory10$Category)
+plot(Category_pred20,testingCategory20$Category)
 
