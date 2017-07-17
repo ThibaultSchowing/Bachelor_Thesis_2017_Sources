@@ -1,6 +1,6 @@
 # Bachelor_Thesis_2017_Sources
 
-Content:
+Contenu :
 
 * GIS
 * Notebook
@@ -29,3 +29,7 @@ Content:
       * VARIETY_ANALYSIS -> Contient pour chaque Variété de café des analyses descriptives de base
     * ViewSOM -> Quelques tests avec SOM
     * Draft_Tests -> Brouillons, entrainement
+
+
+Le dépot contenant la documentation est le suivant:
+> https://github.com/ThibaultSchowing/Bachelor_Thesis_2017
