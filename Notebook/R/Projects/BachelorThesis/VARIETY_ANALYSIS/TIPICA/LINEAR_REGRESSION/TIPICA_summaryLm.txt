@@ -1,0 +1,28 @@
+
+Call:
+lm(formula = formLm, data = data)
+
+Residuals:
+ALL 9 residuals are 0: no residual degrees of freedom!
+
+Coefficients: (5 not defined because of singularities)
+                 Estimate Std. Error t value Pr(>|t|)
+(Intercept)     8.882e+01         NA      NA       NA
+SICA           -1.901e-09         NA      NA       NA
+Luminosidad     4.759e+00         NA      NA       NA
+prec3          -7.183e-02         NA      NA       NA
+prec8           7.645e-02         NA      NA       NA
+dtr2            1.987e+00         NA      NA       NA
+dtr3            8.969e-01         NA      NA       NA
+dtr5           -3.061e+00         NA      NA       NA
+OrientationNum  1.186e-02         NA      NA       NA
+Slope                  NA         NA      NA       NA
+org_avg                NA         NA      NA       NA
+Franco                 NA         NA      NA       NA
+Arenoso                NA         NA      NA       NA
+Cascajoso              NA         NA      NA       NA
+
+Residual standard error: NaN on 0 degrees of freedom
+Multiple R-squared:      1,	Adjusted R-squared:    NaN 
+F-statistic:   NaN on 8 and 0 DF,  p-value: NA
+

@@ -1,0 +1,19 @@
+correlation Matrix
+SICA*
+year	DefectosTotales*
+tmin1	tmin2	tmin3	tmin4	tmin5	tmin6	tmin7	tmin8	tmin9	tmin10	tmax1	tmax2	tmax3	tmax4	tmax7	tmax8	tmean1	tmean2	tmean3	tmean4	tmean5	tmean6	tmean7	tmean8	tmean9	TminTotal	TmaxTotal	TmeanTotal	TminTotalAvg	TmaxTotalAvg	TmeanTotalAvg	ASNM*
+Luminosidad*
+prec1*
+prec3*	prec9	prec10	PrecTotal	PrecTotalAvg
+year	prec4*	prec5	prec6	prec10	PrecTotal	PrecTotalAvg
+prec7*	PrecTotal	PrecTotalAvg
+prec8*	prec2
+dtr3*	tmax2	tmax3	tmax4	tmax8	tmax9	tmean3	tmean9	dtr2	dtr4	dtr8	dtr9	TmaxTotal	DtrTotal	TmaxTotalAvg	DtrTotalAvg
+OrientationNum*
+Slope*
+pH_avg*
+org_avg*
+Arcilloso*
+Limoso*
+Arenoso*
+Cascajoso*

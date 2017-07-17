@@ -1,0 +1,14 @@
+correlation Matrix
+tmin7	tmin8	tmin9	tmin10	tmax3	tmax4	tmax5	tmax6	tmax9	tmax10	tmean4	tmean5	tmean6	tmean9	tmean10	TminTotal	TmaxTotal	TmeanTotal	TminTotalAvg	TmaxTotalAvg	TmeanTotalAvg	SICA*	ASNM
+Arcilloso	Luminosidad*
+dtr10	prec3*	prec2	prec9	PrecTotal	PrecTotalAvg
+prec8*	prec2	prec7
+dtr2*	dtr8
+dtr3*	dtr9
+prec5	prec6	dtr5*	year	dtr1	dtr6
+prec1	dtr4	OrientationNum*
+prec7	Slope*
+org_avg*
+Franco*	pH_avg	Limoso
+tmin5	Arenoso*
+Cascajoso*
